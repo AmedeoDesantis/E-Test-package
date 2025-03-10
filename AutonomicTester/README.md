@@ -7,8 +7,8 @@ Steps to run experiments
 For Linux
 ```sh
 # Install Ollama
-sudo curl -L https://github.com/ollama/ollama/releases/download/v0.1.48/ollama-linux-amd64 -o /usr/bin/ollama
-sudo chmod +x /usr/bin/ollama
+curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz
+sudo tar -C /usr -xzf ollama-linux-amd64.tgz
 # Start Ollama Server
 nohup ollama serve > ollma.log 2>&1 &
 # Pull Llama3 8B model
