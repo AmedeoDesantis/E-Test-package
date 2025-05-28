@@ -41,3 +41,12 @@ To reproduce evaluation results shown in the paper, please run notebooks in `Dat
 ### Autonomic Tester
 To start an experiment from scratch, please run *AutonomicTester* with appropriate arguments.
 We explain how to reproduce results of Llama3 8B in AutonomicTester's [README](AutonomicTester/README.md), which is feasible to run on a local machine with at least 8 GB of RAM. For other LLMs mentioned in the paper, please check the help message via `python AutonomicTester/main.py -h`.
+
+## GitHub Dataset
+
+| Project | Version | LOC | #Classes | #Test Suites | #Test Cases | Avg. Test Cases per Test Suite | Avg. LOC per Test Suite |
+| -------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- |
+| Spring Boot | 3.1.12 | 683,988 | 6,901 | 2,261 | 13,328 | 5 | 135 |
+| Apache ShardingSphere | 5.5.0 | 1,519,076 | 7,635 | 1,382 | 5,867 | 4 | 92 |
+| Apache Dolphinscheduler | 3.2.1 | 257,915 | 2,336 | 469 | 1,988 | 4 | 143 |
+| Micrometer | 1.11.12 | 166,565 | 1,231 | 385 | 1,684 | 4 | 191 |

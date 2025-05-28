@@ -16,5 +16,7 @@ GitHubDataset/
 images/
 plotdata/
 
+DataAnalysis/GitHubRepos
+
 # Environment files
 .venv
