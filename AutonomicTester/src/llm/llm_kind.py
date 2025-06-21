@@ -37,8 +37,8 @@ class LLMKind(Enum):
         # ft:gpt-3.5-turbo-0125:personal:defects4j-20:9kSLJleM latest fine-tuned model with 20 samples from Defects4J per scenario using prompt version 4 (Jul 13)
         model_name_map = {
             "GPT3turbo": "gpt-3.5-turbo",
-            # "GPT3FT": "ft:gpt-3.5-turbo-0125:personal:defects4j-atest:9gx7pSLJ", # raw prompting
-            "GPT3FT": "ft:gpt-3.5-turbo-0125:personal:rag-20250207-032318:Ay9Qrpr3", # with RAG
+            "GPT3FT": "ft:gpt-3.5-turbo-0125:personal:defects4j-atest:9gx7pSLJ", # raw prompting
+            #"GPT3FT": "ft:gpt-3.5-turbo-0125:personal:rag-20250207-032318:Ay9Qrpr3", # with RAG
             "GPT4": "gpt-4",
             "GPT4turbo": "gpt-4-turbo",
             "GPT4o": "gpt-4o",

@@ -12,4 +12,4 @@ DEFACTS4J_PATH = "Defects4jDataset"
 DEFACTS4J_PROMPT_PATH = os.path.join(DEFACTS4J_PATH, "prompts")
 FEW_SHOTS_PATH = "AutonomicTester/src/prompt/fewshots"
 PROMPT_DATASET_PATH = "PromptDataset"
-FINE_TUNE_LLM_VALIDATION_PATH = os.path.join("FineTuneLLM", "validation_paths_v4_q3diff5p.json")
+FINE_TUNE_LLM_VALIDATION_PATH = os.path.join("FineTuneDataset", "validation_paths_v4_q3diff5p.json")
