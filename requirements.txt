@@ -13,3 +13,4 @@ llama-index == 0.12.22
 llama-index-llms-ollama == 0.5.2
 llama-index-llms-openai == 0.3.25
 ipywidgets == 8.1.5
+jupyterlab == 4.5.1

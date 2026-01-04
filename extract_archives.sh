@@ -1,8 +1,13 @@
 #!/bin/bash
 RESULTS_DIR="AutonomicTester/experiment_results"
+
+if [ -d "PromptDataset" ] && [ -d "$RESULTS_DIR" ]; then
+    echo "Archives are already extracted."
+    exit 0
+fi
+
 mkdir -p $RESULTS_DIR
 ARCHIVES_DIR="Archives"
-
 # Extract dataset
 (
     echo "Extracting dataset ..."

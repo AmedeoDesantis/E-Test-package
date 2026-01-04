@@ -20,7 +20,7 @@ dataset_parser = argparse.ArgumentParser(add_help=False)
 dataset_parser.add_argument(
     "-d",
     "--dataset",
-    choices=["Defects4J", "Defects4AT", "Validation", "SpringBoot"],
+    choices=["Defects4J", "Defects4AT", "Defects", "Validation", "SpringBoot"],
     help="a target Java defect dataset",
     required=True,
 )
@@ -120,6 +120,16 @@ parser_prompt.add_argument(
     default=0.75,
 )
 parser_prompt.add_argument(
+    "--host",
+    default="127.0.0.1:11434",
+    help=f"Ollama host IP",
+)
+parser_prompt.add_argument(
+    "--seed",
+    default=27,
+    help=f"random seed for Ollama",
+)
+parser_prompt.add_argument(
     "--format",
     choices=["jsonline", "txt"],
     default="txt",
@@ -171,8 +181,8 @@ parser_summarize = subparsers.add_parser(
 parser_summarize.add_argument(
     "-e",
     "--experiment",
-    help=f"the name of an experiment folder",
-    default=None,
+    help=f"a target experiment folder in AutonomicTester/experiment_results/ to summarize results",
+    default="",
 )
 parser_summarize.add_argument(
     "--validation",

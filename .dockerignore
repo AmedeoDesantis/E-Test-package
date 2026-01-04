@@ -1,3 +1,8 @@
+Archives
+.git
+*.pyc
+
+
 # MAC files
 .DS_Store
 
@@ -24,3 +29,4 @@ DataAnalysis/GitHubRepos
 
 ollama.log
 jupyter.log
+ollama_models

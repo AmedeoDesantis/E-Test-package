@@ -7,11 +7,20 @@ class LLMKind(Enum):
     GPT4 = "OpenAI GPT-4"
     GPT4turbo = "OpenAI GPT-4 Turbo"
     GPT4o = "OpenAI GPT-4o"
+    Gemini = "Google Gemini"
     LLama2_7B = "Meta LLama2 7B"
     LLama3_8B = "Meta LLama3 8B"
     LLama3_70B = "Meta LLama3 70B"
+    LLama3_2_1B = "Meta LLama3.2 1B"
+    LLama3_2_3B = "Meta LLama3.2 3B"
     LLama3_1_8B = "Meta LLama3.1 8B"
     LLama3_3_70B = "Meta LLama3.3 70B"
+    Gemma2_27B = "Google Gemma2 27B"
+    # Deepseek R1
+    Deepseek_R1_1d5B = "Deepseek R1 1.5B"
+    Deepseek_R1_7B = "Deepseek R1 7B"
+    Deepseek_R1_14B = "Deepseek R1 14B"
+    Deepseek_R1_32B = "Deepseek R1 32B"
     Deepseek_R1_70B = "Deepseek R1 70B"
 
     @classmethod
@@ -22,12 +31,20 @@ class LLMKind(Enum):
             "GPT4": "GPT4: require an API key on the environment path",
             "GPT4turbo": "GPT4turbo: require an API key on the environment path",
             "GPT4o": "GPT4o: require an API key on the environment path",
+            "Gemini": "Gemini: require an API key on the environment path and a VPN connected to the USA",
             "LLama2_7B": "LLama2_7B: run locally but require 8 GB of RAM",
             "LLama3_8B": "LLama3_8B: run locally but require 8 GB of RAM",
+            "LLama3_2_1B": "Meta LLama3.2 1B",
+            "LLama3_2_3B": "Meta LLama3.2 3B",
             "LLama3_70B": "LLama3_70B: run locally but require a GPU with 40 GB of RAM",
             "LLama3_1_8B": "LLama3_1_8B: run locally but require 8 GB of RAM",
             "LLama3_3_70B": "LLama3_3_70B: run locally but require 40 GB of RAM",
-            "Deepseek_R1_70B": "Deepseek_R1_70B: run locally but require 40 GB of RAM"
+            "Gemma2_27B": "Gemma2_27B: run locally",
+            "Deepseek_R1_70B": "Deepseek_R1_70B: run locally but require 40 GB of RAM",
+            "Deepseek_R1_1d5B": "",
+            "Deepseek_R1_14B": "",
+            "Deepseek_R1_7B": "",
+            "Deepseek_R1_32B": ""
         }
         return "; ".join(f"{description_map[llm.name]}" for llm in cls)
 
@@ -38,16 +55,23 @@ class LLMKind(Enum):
         model_name_map = {
             "GPT3turbo": "gpt-3.5-turbo",
             "GPT3FT": "ft:gpt-3.5-turbo-0125:personal:defects4j-atest:9gx7pSLJ", # raw prompting
-            #"GPT3FT": "ft:gpt-3.5-turbo-0125:personal:rag-20250207-032318:Ay9Qrpr3", # with RAG
+            # "GPT3FT": "ft:gpt-3.5-turbo-0125:personal:rag-20250207-032318:Ay9Qrpr3", # with RAG
             "GPT4": "gpt-4",
             "GPT4turbo": "gpt-4-turbo",
             "GPT4o": "gpt-4o",
             "LLama2_7B": "llama2",
-            "LLama3_8B": "llama3",
+            "LLama3_2_1B": "llama3.2:1b",
+            "LLama3_2_3B": "llama3.2:3b",
+            "LLama3_8B": "llama3:8b",
             "LLama3_70B": "llama3:70b",
             "LLama3_1_8B": "llama3.1",
             "LLama3_3_70B": "llama3.3",
-            "Deepseek_R1_70B": "deepseek-r1:70b"
+            "Gemma2_27B": "gemma2:27b",
+            "Deepseek_R1_70B": "deepseek-r1:70b",
+            "Deepseek_R1_1d5B": "deepseek-r1:1.5b",
+            "Deepseek_R1_7B": "deepseek-r1:7b",
+            "Deepseek_R1_14B": "deepseek-r1:14b",
+            "Deepseek_R1_32B": "deepseek-r1:32b"
         }
         if self.name in model_name_map:
             return model_name_map[self.name]
@@ -58,11 +82,18 @@ class LLMKind(Enum):
         model_context_limit_map = {
             "LLama3_8B": 8192,
             "LLama3_1_8B": 8192,
+            "LLama3_2_1B": 8192,
+            "LLama3_2_3B": 8192,
             "LLama3_70B": 8192,
             "GPT3turbo": 16385,
             "GPT3FT": 16385,
             "GPT4turbo": 128000,
             "GPT4o": 128000,
+            "Gemma2_27B": 8192,
+            "Deepseek_R1_1d5B": 8192,
+            "Deepseek_R1_7B": 8192,
+            "Deepseek_R1_14B": 8192,
+            "Deepseek_R1_32B": 8192
         }
         if self.name in model_context_limit_map:
             return model_context_limit_map[self.name]
@@ -73,29 +104,27 @@ class LLMKind(Enum):
         model_name_map = {
             "LLama3_8B": "meta-llama/Meta-Llama-3-8B",
             "LLama3_70B": "meta-llama/Meta-Llama-3-70B",
+            "LLama3_2_1B": "meta-llama/Meta-Llama-3-8B",
+            "LLama3_2_3B": "meta-llama/Meta-Llama-3-8B",
             "LLama3_1_8B": "meta-llama/Llama-3.1-8B",
             "LLama3_3_70B": "meta-llama/Llama-3.3-70B-Instruct",
-            "Deepseek_R1_70B": "deepseek-ai/DeepSeek-R1"
+            "Deepseek_R1_70B": "deepseek-ai/DeepSeek-R1",
+            "Deepseek_R1_1d5B": "deepseek-ai/DeepSeek-R1",
+            "Deepseek_R1_7B": "deepseek-ai/DeepSeek-R1",
+            "Deepseek_R1_14B": "deepseek-ai/DeepSeek-R1",
+            "Deepseek_R1_32B": "deepseek-ai/DeepSeek-R1",
         }
         if self.name in model_name_map:
             return model_name_map[self.name]
         else:
             raise ValueError(f"Enum member {self} not found in HuggingFace models.")
 
-    def is_llama_model(self):
+    def is_ollama_model(self):
         return (
-            self is LLMKind.LLama3_8B
-            or self is LLMKind.LLama3_70B
-            or self is LLMKind.LLama3_1_8B
-            or self is LLMKind.LLama3_3_70B
-            or self is LLMKind.Deepseek_R1_70B
+            "LLama" in self.name or "Deepseek" in self.name
         )
 
     def is_gpt_model(self):
         return (
-            self is LLMKind.GPT3FT
-            or self is LLMKind.GPT3turbo
-            or self is LLMKind.GPT4
-            or self is LLMKind.GPT4o
-            or self is LLMKind.GPT4turbo
+            "GPT" in self.name
         )

@@ -25,6 +25,7 @@ from src.output.output import (
 
 from src.llm.llm_kind import LLMKind
 from src.prompt.prompt_kind import PromptKind
+from src.prompt.answer import Answer
 
 
 class PromptLlmHandler:
@@ -35,6 +36,8 @@ class PromptLlmHandler:
     RESULTS_FNAME = "results.jsonl"
 
     def __init__(self, args):
+        self.client = ollama.Client(host=args.host)
+        self.seed = int(args.seed)
         self.chosen_llm = LLMKind[args.model]
         self.chosen_scenario = PromptKind[args.scenario]
         self.version = args.version
@@ -113,12 +116,11 @@ class PromptLlmHandler:
 
     def _initialize_tokenizer(self):
         # Get Llama tokenizer
-        if self._is_llama_model():
-            # huggingface_hub.login(os.environ["HUGGING_FACE_API_KEY"])
-            llama3_tokenizer = AutoTokenizer.from_pretrained(
+        if self.chosen_llm.is_ollama_model():
+            huggingface_hub.login(os.environ["HUGGING_FACE_API_KEY"])
+            self.tokenizer_encode = AutoTokenizer.from_pretrained(
                 self.chosen_llm.get_hf_model_name()
-            )
-            self.tokenizer_encode = llama3_tokenizer.tokenize
+            ).tokenize
         elif self.chosen_llm is LLMKind.GPT4o:
             self.tokenizer_encode = tiktoken.encoding_for_model("gpt-4o").encode
         elif (
@@ -131,28 +133,12 @@ class PromptLlmHandler:
         else:
             self.tokenizer_encode = None
 
-    def _is_llama_model(self):
-        return (
-            self.chosen_llm is LLMKind.LLama3_8B
-            or self.chosen_llm is LLMKind.LLama3_70B
-            or self.chosen_llm is LLMKind.LLama3_1_8B
-        )
-
-    def _is_gpt_model(self):
-        return (
-            self.chosen_llm is LLMKind.GPT3FT
-            or self.chosen_llm is LLMKind.GPT3turbo
-            or self.chosen_llm is LLMKind.GPT4
-            or self.chosen_llm is LLMKind.GPT4o
-            or self.chosen_llm is LLMKind.GPT4turbo
-        )
-
     def _prompt_llm(self, chat_msgs: list) -> str:
         """
         Wraps LLM prompting API in a single function
         """
-        if self._is_llama_model():
-            response = ollama.chat(
+        if self.chosen_llm.is_ollama_model():
+            response = self.client.chat(
                 model=self.chosen_llm.get_intenal_model_name(),
                 messages=chat_msgs,
                 options={
@@ -163,7 +149,7 @@ class PromptLlmHandler:
                 stream=False,
             )
             return response["message"]["content"]
-        elif self._is_gpt_model():
+        elif self.chosen_llm.is_gpt_model():
             response = prompt_gpt(
                 self.chosen_llm.get_intenal_model_name(),
                 chat_msgs,
@@ -174,15 +160,16 @@ class PromptLlmHandler:
     def _prompt_llama_model(
         self, messages, bug_id, project_id, prompt_stats: dict, enable_tcg: bool
     ):
-        scenario_response = ollama.chat(
+        scenario_response = self.client.chat(
             model=self.chosen_llm.get_intenal_model_name(),
             messages=messages,
             options={
-                "seed": 27,
+                "seed": self.seed,
                 "temperature": self.temperature,
                 "num_ctx": self.chosen_llm.get_context_limit(),
             },
             stream=False,
+            format=Answer.model_json_schema(),
         )
         # store response metrics
         prompt_stats["elapsed_nanoseconds"] = scenario_response["total_duration"]
@@ -360,11 +347,11 @@ class PromptLlmHandler:
             }
             # Send requests with messages to prompt LLM
             try:
-                if self._is_gpt_model():
+                if self.chosen_llm.is_gpt_model():
                     response, tcg_response = self._prompt_gpt_model(
                         messages, bug_id, project_id, prompt_stats, False
                     )
-                elif self._is_llama_model():
+                elif self.chosen_llm.is_ollama_model():
                     response, tcg_response, num_tokens = self._prompt_llama_model(
                         messages, bug_id, project_id, prompt_stats, False
                     )
