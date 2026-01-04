@@ -39,3 +39,11 @@ ARCHIVES_DIR="Archives"
     mkdir -p "images"
     tar -xzf "plotdata.tar.gz"
 )
+
+# Extract GitHub repos
+(
+    echo "Extracting GitHub repos ..."
+    GITHUB_REPOS_DIR="DataAnalysis"
+    mkdir -p $GITHUB_REPOS_DIR
+    tar -xzf "Archives/GitHubRepos.tar.gz" -C $GITHUB_REPOS_DIR
+)
