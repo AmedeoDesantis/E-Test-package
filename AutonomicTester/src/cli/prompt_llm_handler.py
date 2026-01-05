@@ -349,11 +349,11 @@ class PromptLlmHandler:
             try:
                 if self.chosen_llm.is_gpt_model():
                     response, tcg_response = self._prompt_gpt_model(
-                        messages, bug_id, project_id, prompt_stats, False
+                        messages, bug_id, project_id, prompt_stats, True
                     )
                 elif self.chosen_llm.is_ollama_model():
                     response, tcg_response, num_tokens = self._prompt_llama_model(
-                        messages, bug_id, project_id, prompt_stats, False
+                        messages, bug_id, project_id, prompt_stats, True
                     )
             except Exception as e:
                 print(e)

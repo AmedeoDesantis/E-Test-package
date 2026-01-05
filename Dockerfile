@@ -27,6 +27,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY AutonomicTester AutonomicTester
 COPY DataAnalysis DataAnalysis
+COPY Archives Archives
 # COPY ollama_models /root/.ollama/
 COPY extract_archives.sh .
 
