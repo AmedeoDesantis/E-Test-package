@@ -19,6 +19,7 @@ plotdata/
 DataAnalysis/GitHubRepos
 
 # Environment files
+.env
 .venv
 .vscode
 

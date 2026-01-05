@@ -18,27 +18,27 @@ ARCHIVES_DIR="Archives"
 )
 
 # Extract results
-(
-    echo "Extracting results ..."
-    cd "${ARCHIVES_DIR}/results"
-    for result_folder in *; do
-        if [ -d "$result_folder" ]; then
-            for file in "${result_folder}"/*.tar.gz; do
-                echo "Extracting $file ..."
-                mkdir -p "../../${RESULTS_DIR}/${result_folder}"
-                tar -xzf "$file" -C "../../${RESULTS_DIR}/${result_folder}"
-            done
-        fi
-    done
-)
+# (
+#     echo "Extracting results ..."
+#     cd "${ARCHIVES_DIR}/results"
+#     for result_folder in *; do
+#         if [ -d "$result_folder" ]; then
+#             for file in "${result_folder}"/*.tar.gz; do
+#                 echo "Extracting $file ..."
+#                 mkdir -p "../../${RESULTS_DIR}/${result_folder}"
+#                 tar -xzf "$file" -C "../../${RESULTS_DIR}/${result_folder}"
+#             done
+#         fi
+#     done
+# )
 
-# Extract plot data
-(
-    echo "Extracting plot data ..."
-    cd "DataAnalysis"
-    mkdir -p "images"
-    tar -xzf "plotdata.tar.gz"
-)
+# # Extract plot data
+# (
+#     echo "Extracting plot data ..."
+#     cd "DataAnalysis"
+#     mkdir -p "images"
+#     tar -xzf "plotdata.tar.gz"
+# )
 
 # Extract GitHub repos and Llama tokenizer
 (
