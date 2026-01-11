@@ -43,12 +43,10 @@ WORKDIR /app
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install Python dependencies from your requirements file
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/AmedeoDesantis/E-Test-package.git .
 
-# Copy the rest of the project files
-COPY . .
+# Install Python dependencies from your requirements file
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Make sure startup scripts are executable
 RUN chmod +x /app/entrypoint.sh /app/extract_archives.sh
