@@ -44,6 +44,7 @@ class PromptLlmHandler:
         self.dataset = args.dataset
         self.queries = args.queries
         self.projects = args.projects
+        self.enable_tcg = args.generate_test_case
         self.temperature = float(args.temperature)
         self.num_shots = int(args.few_shots)
         self.response_output_format = args.format
@@ -349,11 +350,11 @@ class PromptLlmHandler:
             try:
                 if self.chosen_llm.is_gpt_model():
                     response, tcg_response = self._prompt_gpt_model(
-                        messages, bug_id, project_id, prompt_stats, True
+                        messages, bug_id, project_id, prompt_stats, enable_tcg
                     )
                 elif self.chosen_llm.is_ollama_model():
                     response, tcg_response, num_tokens = self._prompt_llama_model(
-                        messages, bug_id, project_id, prompt_stats, True
+                        messages, bug_id, project_id, prompt_stats, enable_tcg
                     )
             except Exception as e:
                 print(e)

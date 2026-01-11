@@ -135,6 +135,12 @@ parser_prompt.add_argument(
     default="txt",
     help=f"output format of LLM responses",
 )
+
+parser_prompt.add_argument(
+    "--generate_test_case",
+    action="store_true",
+    help="if enabled, generate test cases"
+)
 parser_prompt.set_defaults(func=prompt_llm)
 
 # Functionality for querying LLMs with RAG
