@@ -1,40 +1,61 @@
-FROM python:3.10-slim
+FROM ubuntu:22.04
 
-# Arguments
-# You can override this with -e OLLAMA_MODEL="..." in docker run
-ENV OLLAMA_MODEL="llama3.2:1b"
+# Avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Set environment variables to prevent Python from buffering stdout
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# 1. Install system dependencies required by Defects4J and Python
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-pip \
+    python3-venv \
+    openjdk-11-jdk \
+    git \
+    subversion \
+    perl \
+    cpanminus \
+    make \
+    curl \
+    unzip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install system dependencies
-RUN apt-get update && apt-get install curl tar -y
+# 2. Setup Defects4J (following the official GitHub instructions)
+WORKDIR /opt
+RUN git clone https://github.com/rjust/defects4j.git defects4j
 
-# Install Ollama
+WORKDIR /opt/defects4j
+
+# Automatically install all Perl dependencies via cpanm
+RUN cpanm --installdeps .
+
+# Initialize the framework (downloads external libraries and repositories)
+RUN ./init.sh
+
+# Add Defects4J executables to the system PATH
+ENV PATH="/opt/defects4j/framework/bin:${PATH}"
+
+# 3. Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
+# 4. Python environment and project setup
 WORKDIR /app
 
-# Create a Python virtual environment
-ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
-# Update PATH so we use the venv by default
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-# Install Python dependencies
+# Create a virtual environment to isolate Python packages
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python dependencies from your requirements file
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY AutonomicTester AutonomicTester
-COPY DataAnalysis DataAnalysis
-COPY Archives Archives
-# COPY ollama_models /root/.ollama/
-COPY extract_archives.sh .
+# Copy the rest of the project files
+COPY . .
 
-# Setup the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Make sure startup scripts are executable
+RUN chmod +x /app/entrypoint.sh /app/extract_archives.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
-# Open a bash shell to run the specific Python commands manually
+# Expose port for Jupyter Lab
+EXPOSE 8888
+
+# Set entrypoint and default command
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["/bin/bash"]
